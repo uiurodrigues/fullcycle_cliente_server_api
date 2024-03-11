@@ -61,7 +61,7 @@ func main() {
 func savePriceOnFile(price float64) error {
 	log.Println("Saving price on file...")
 
-	file, err := os.Create("cotacao.txt")
+	file, err := os.OpenFile("cotacao.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return err
 	}
