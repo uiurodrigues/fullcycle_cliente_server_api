@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"time"
 
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
@@ -36,6 +36,9 @@ type PriceData struct {
 }
 
 func main() {
+	log.Println("Starting server...")
+	defer log.Println("Server finished...")
+
 	http.HandleFunc("/cotacao", handler)
 	http.ListenAndServe(":8080", nil)
 }
@@ -85,8 +88,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func savePrice(price Price) error {
-	dsn := "root:root@tcp(localhost:3306)/cotacao"
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("cotacao.db"), &gorm.Config{})
 	if err != nil {
 		return err
 	}
